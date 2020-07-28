@@ -4,7 +4,12 @@
     <AzureFunctionsVersion>v3</AzureFunctionsVersion>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Graph" Version="3.8.0" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.17.0" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RoomCleaning.Shared\RoomCleaning.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
