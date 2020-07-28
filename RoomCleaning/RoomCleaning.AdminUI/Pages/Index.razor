@@ -14,7 +14,7 @@
 }
 else
 {
-<EditForm Model="@policy">
+<EditForm Model="@policy" OnSumbit="HandleSubmit">
     <table class="table">
         <thead>
             <tr>
@@ -52,7 +52,7 @@ else
     </label>
     <button type="submit">Submit</button>
 </EditForm>
-    }
+}
 
 
 
@@ -82,4 +82,13 @@ else
         filteredRooms = filteredList.ToArray();
         StateHasChanged();
     }
+
+    private void HandleSumbit(EditContext context)
+    {
+        var selectedRooms = from f in filteredRooms where f.IsSelected select f;
+        if (selectedRooms.Count() == 0)
+            return; //TODO: error message
+
+        var request = new RoomCleaning.Shared.Models.RoomPolicyRequest { Policy = policy, Rooms = selectedRooms.ToArray() };
+}
 }

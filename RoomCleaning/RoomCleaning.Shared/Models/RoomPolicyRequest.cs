@@ -4,7 +4,9 @@ using System.Text;
 
 namespace RoomCleaning.Shared.Models
 {
-    class RoomPolicyRequest
+    public class RoomPolicyRequest
     {
+        public Room[] Rooms { get; set; }
+        public RoomPolicy Policy { get; set; }
     }
 }
