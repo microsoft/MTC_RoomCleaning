@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,5 +9,8 @@ namespace RoomCleaning.Shared.Models
     {
         public string Id { get; set; }
         public string DisplayName { get; set; }
+
+        [JsonIgnore]
+        public bool IsSelected { get; set; }
     }
 }
