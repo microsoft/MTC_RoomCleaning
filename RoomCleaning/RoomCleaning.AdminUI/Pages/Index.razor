@@ -4,12 +4,21 @@
 <h1>Room Cleaning Admin</h1>
 
 Welcome @rooms.Length
+<input placeholder="Filter by..." @oninput="Filter"/>
+<h2>@filter</h2>
 
 @code 
 {
+    private string filter = "empty";
+
     private RoomCleanup.Shared.Models.ResourceData[] rooms;
     protected override async Task OnInitializedAsync()
     {
         rooms = await subService.GetRoomsAsync();
+    }
+
+    public void Filter(ChangeEventArgs args)
+    {
+        filter = args.Value.ToString();
     }
 }
