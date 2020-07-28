@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoomCleaning.AdminUI", "Roo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoomCleaning.TaskUI", "RoomCleaning.TaskUI\RoomCleaning.TaskUI.csproj", "{F44A72CD-1EF9-4313-B40A-B06FB923955F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoomCleaning.Shared", "RoomCleaning.Shared\RoomCleaning.Shared.csproj", "{06916901-7E05-4467-9214-C774C2B0A84B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoomCleaning.Shared", "RoomCleaning.Shared\RoomCleaning.Shared.csproj", "{06916901-7E05-4467-9214-C774C2B0A84B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
