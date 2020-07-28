@@ -1,4 +1,5 @@
-﻿using RoomCleaning.Shared.Models;
+﻿using Newtonsoft.Json;
+using RoomCleaning.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,5 +29,16 @@ namespace RoomCleaning.AdminUI.Services
 
             return rooms.ToArray();
         }
+        
+        public async Task SendPolicyRequest(RoomPolicyRequest request)
+        {
+            if (request is null)
+                throw new ArgumentNullException($"{nameof(request)} cannot be null");
+
+            if (request.Policy is null || request.Rooms == null)
+                throw new ArgumentNullException($"{nameof(request.Rooms)} and/or{nameof(request.Policy)} cannot be null");
+
+            var json = JsonConvert.SerializeObject(request);
+
     }
 }
