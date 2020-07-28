@@ -1,7 +1,15 @@
 ﻿@page "/"
+@inject RoomCleaning.AdminUI.Services.SubscriptionService subService;
 
 <h1>Room Cleaning Admin</h1>
 
-Welcome 
+Welcome @rooms.Length
 
-
+@code 
+{
+    private RoomCleanup.Shared.Models.ResourceData[] rooms;
+    protected override async Task OnInitializedAsync()
+    {
+        rooms = await subService.GetRoomsAsync();
+    }
+}

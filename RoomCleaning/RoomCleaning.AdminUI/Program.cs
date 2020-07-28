@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using RoomCleaning.AdminUI.Services;
 
 namespace RoomCleaning.AdminUI
 {
@@ -16,8 +17,11 @@ namespace RoomCleaning.AdminUI
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
-
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            
+            
+            var baseApi_Uri = new Uri(builder.Configuration["baseApi_uri"]);
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = baseApi_Uri });
+            builder.Services.AddHttpClient<SubscriptionService>(service => service.BaseAddress = baseApi_Uri);
 
             await builder.Build().RunAsync();
         }
