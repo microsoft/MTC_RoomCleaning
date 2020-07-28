@@ -1,4 +1,4 @@
-﻿using RoomCleanup.Shared.Models;
+﻿using RoomCleaning.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,12 +17,12 @@ namespace RoomCleaning.AdminUI.Services
             _client = client;
         }
 
-        public async Task<ResourceData[]> GetRoomsAsync()
+        public async Task<Room[]> GetRoomsAsync()
         {
-            var rooms = new List<ResourceData>();
+            var rooms = new List<Room>();
             for (int i = 0; i < 3; i++)
             {
-                var room = new ResourceData() { Id = $"{i}" };
+                var room = new Room() { Id = $"{i}" , DisplayName = $"Room{i}"};
                 rooms.Add(room);
             }
 

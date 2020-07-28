@@ -39,7 +39,7 @@ else
 {
     private string filter = "empty";
 
-    private RoomCleanup.Shared.Models.ResourceData[] rooms;
+    private RoomCleaning.Shared.Models.Room[] rooms;
     protected override async Task OnInitializedAsync()
     {
         rooms = await subService.GetRoomsAsync();
@@ -47,6 +47,10 @@ else
 
     public void Filter(ChangeEventArgs args)
     {
-        filter = args.Value.ToString();
+        if (rooms is null || rooms.Length == 0)
+            return;
+
+        var filteredList = from r in rooms where r.Id.StartsWith(args.Value.ToString()) select r;
+
     }
 }

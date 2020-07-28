@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace RoomCleanup.Shared.Models
+namespace RoomCleaning.Shared.Models
 {
     public class ResourceData
     {

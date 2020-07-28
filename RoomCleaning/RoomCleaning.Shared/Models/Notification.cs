@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace RoomCleanup.Shared.Models
+namespace RoomCleaning.Shared.Models
 {
     public class Notifications
     {
