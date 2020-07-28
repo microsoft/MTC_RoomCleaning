@@ -22,7 +22,7 @@ namespace RoomCleaning.AdminUI.Services
             var rooms = new List<Room>();
             for (int i = 0; i < 3; i++)
             {
-                var room = new Room() { Id = $"{i}" , DisplayName = $"Room{i}"};
+                var room = new Room() { Id = $"{i}" , DisplayName = $"{i}Room"};
                 rooms.Add(room);
             }
 

@@ -2,55 +2,60 @@
 @inject RoomCleaning.AdminUI.Services.SubscriptionService subService;
 
 <h1>Room Cleaning Admin</h1>
-
-@if (rooms == null)
+<input placeholder="Filter by..." @oninput="Filter" />
+@if (allRooms == null)
 {
     <p><em>Loading...</em></p>
 }
 
-@if (rooms.Length == 0)
+@if (allRooms.Length == 0)
 {
     <p><em>No Rooms Found.</em></p>
 }
 else
 {
-<table class="table">
-    <thead>
-        <tr>
-            <th>Room Name</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var room in rooms)
-        {
+    <table class="table">
+        <thead>
             <tr>
-                <td>@room.DisplayName</td>
-              </tr>
-        }
-    </tbody>
-</table>
+                <th>Room Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var room in filteredRooms)
+            {
+                <tr>
+                    <td>@room.DisplayName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 
-<input placeholder="Filter by..." @oninput="Filter"/>
-<h2>@filter</h2>
 
-@code 
+
+@code
 {
     private string filter = "empty";
 
-    private RoomCleaning.Shared.Models.Room[] rooms;
+    private RoomCleaning.Shared.Models.Room[] allRooms;
+    private RoomCleaning.Shared.Models.Room[] filteredRooms;
+
     protected override async Task OnInitializedAsync()
     {
-        rooms = await subService.GetRoomsAsync();
+        allRooms = filteredRooms = await subService.GetRoomsAsync();
     }
 
     public void Filter(ChangeEventArgs args)
     {
-        if (rooms is null || rooms.Length == 0)
+        if (allRooms is null || allRooms.Length == 0)
             return;
 
-        var filteredList = from r in rooms where r.Id.StartsWith(args.Value.ToString()) select r;
+        if (args.Value.ToString() == string.Empty)
+            filteredRooms = allRooms;
 
+        var filteredList = from r in allRooms where r.Id.StartsWith(args.Value.ToString()) select r;
+        filteredRooms = filteredList.ToArray();
+        StateHasChanged();
     }
 }
