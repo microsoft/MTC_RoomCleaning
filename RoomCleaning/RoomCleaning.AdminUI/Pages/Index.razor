@@ -1,5 +1,7 @@
 ﻿@page "/"
-@inject RoomCleaning.AdminUI.Services.SubscriptionService subService;
+
+@inject RoomCleaning.AdminUI.Services.RoomPolicyService subService;
+
 
 <h1>Room Cleaning Admin</h1>
 <input placeholder="Filter by..." @oninput="Filter" />
@@ -14,7 +16,7 @@
 }
 else
 {
-<EditForm Model="@policy" OnSumbit="HandleSubmit">
+<EditForm EditContext="@editContext" OnSubmit="HandleSubmit">
     <table class="table">
         <thead>
             <tr>
@@ -31,25 +33,31 @@ else
             }
         </tbody>
     </table>
+    <p/>
     <label>
         Cleaning Time:
         <InputNumber @bind-Value="policy.CleaningTime" />
     </label>
+    <p />
     <label>
         Clean Room Before Meeting?
         <InputCheckbox @bind-Value="policy.CleanBefore" />
     </label>
+    <p />
     Notification Type:
+    <p />
     <label>
         Email
         <InputRadio name="notification" SelectedValue="RoomCleaning.Shared.Models.NotificationType.Email" @bind-Value="policy.NotificationType" />
 
     </label>
+    <p/>
     <label>
         SMS
         <InputRadio name="notification" SelectedValue="RoomCleaning.Shared.Models.NotificationType.SMS" @bind-Value="policy.NotificationType" />
 
     </label>
+    <p />
     <button type="submit">Submit</button>
 </EditForm>
 }
@@ -58,6 +66,7 @@ else
 
 @code
 {
+    private EditContext editContext;
     private string filter = "empty";
 
     private RoomCleaning.Shared.Models.Room[] allRooms;
@@ -67,6 +76,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        policy = new RoomCleaning.Shared.Models.RoomPolicy();
+        editContext = new EditContext(policy);
         allRooms = filteredRooms = await subService.GetRoomsAsync();
     }
 
@@ -83,12 +94,18 @@ else
         StateHasChanged();
     }
 
-    private void HandleSumbit(EditContext context)
+    private async Task HandleSubmit()
     {
+        filter = "bang";
+
         var selectedRooms = from f in filteredRooms where f.IsSelected select f;
         if (selectedRooms.Count() == 0)
             return; //TODO: error message
 
         var request = new RoomCleaning.Shared.Models.RoomPolicyRequest { Policy = policy, Rooms = selectedRooms.ToArray() };
-}
+
+        var result = await subService.SendPolicyRequest(request);
+
+        //var dialogResult = await ModelDialog.ShowDialogAsync<ErrorDialog>("Error Saving Policy");
+    }
 }
