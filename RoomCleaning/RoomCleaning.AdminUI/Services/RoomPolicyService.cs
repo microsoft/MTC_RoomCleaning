@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace RoomCleaning.AdminUI.Services
 {
-    public class SubscriptionService
+    public class RoomPolicyService
     {
         private readonly HttpClient _client;
 
-        public SubscriptionService(HttpClient client)
+        public RoomPolicyService(HttpClient client)
         {
             _client = client;
         }
@@ -29,8 +29,8 @@ namespace RoomCleaning.AdminUI.Services
 
             return rooms.ToArray();
         }
-        
-        public async Task SendPolicyRequest(RoomPolicyRequest request)
+
+        public async Task<bool> SendPolicyRequest(RoomPolicyRequest request)
         {
             if (request is null)
                 throw new ArgumentNullException($"{nameof(request)} cannot be null");
@@ -40,5 +40,7 @@ namespace RoomCleaning.AdminUI.Services
 
             var json = JsonConvert.SerializeObject(request);
 
+            return true;
+        }
     }
 }

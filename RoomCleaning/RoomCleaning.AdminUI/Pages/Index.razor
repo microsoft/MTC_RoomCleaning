@@ -1,5 +1,5 @@
 ﻿@page "/"
-
+@inject Blazor.ModalDialog.IModalDialogService ModalDialogService; 
 @inject RoomCleaning.AdminUI.Services.RoomPolicyService subService;
 
 
@@ -100,12 +100,17 @@ else
 
         var selectedRooms = from f in filteredRooms where f.IsSelected select f;
         if (selectedRooms.Count() == 0)
-            return; //TODO: error message
+        {
+            var parameters = new ModalDialogParameters();
+            parameters.Add("Message", "No rooms were selected");
+            var dialogResult = await ModalDialogService.ShowDialogAsync<ErrorDialog>("Error", new ModalDialogOptions(), parameters);
+            return;
+        }
 
         var request = new RoomCleaning.Shared.Models.RoomPolicyRequest { Policy = policy, Rooms = selectedRooms.ToArray() };
 
         var result = await subService.SendPolicyRequest(request);
 
-        //var dialogResult = await ModelDialog.ShowDialogAsync<ErrorDialog>("Error Saving Policy");
+
     }
 }

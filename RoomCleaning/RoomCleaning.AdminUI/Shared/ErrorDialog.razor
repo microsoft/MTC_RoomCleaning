@@ -1,0 +1,15 @@
+﻿@inject IModalDialogService ModalDialogService
+<p>
+    @Message
+</p>
+<button class="btn btn-danger" @onclick="Ok_Clicked">Ok</button>
+
+@code {
+    [Parameter]
+    public string Message { get; set; }
+
+    private void Ok_Clicked()
+    {
+        ModalDialogService.Close(true);
+    }
+}
