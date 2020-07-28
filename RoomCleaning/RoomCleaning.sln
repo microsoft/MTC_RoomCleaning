@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29721.120
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoomCleaning.API", "RoomCleaning.API\RoomCleaning.API.csproj", "{0AFC84C8-A58A-418B-B9CB-CB1D166D54A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoomCleaning.API", "RoomCleaning.API\RoomCleaning.API.csproj", "{0AFC84C8-A58A-418B-B9CB-CB1D166D54A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoomCleaning.AdminUI", "RoomCleaning.AdminUI\RoomCleaning.AdminUI.csproj", "{680642BD-62D3-4310-8837-1D55D5F48A92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoomCleaning.AdminUI", "RoomCleaning.AdminUI\RoomCleaning.AdminUI.csproj", "{680642BD-62D3-4310-8837-1D55D5F48A92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoomCleaning.TaskUI", "RoomCleaning.TaskUI\RoomCleaning.TaskUI.csproj", "{F44A72CD-1EF9-4313-B40A-B06FB923955F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoomCleaning.TaskUI", "RoomCleaning.TaskUI\RoomCleaning.TaskUI.csproj", "{F44A72CD-1EF9-4313-B40A-B06FB923955F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoomCleaning.Shared", "RoomCleaning.Shared\RoomCleaning.Shared.csproj", "{06916901-7E05-4467-9214-C774C2B0A84B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{F44A72CD-1EF9-4313-B40A-B06FB923955F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F44A72CD-1EF9-4313-B40A-B06FB923955F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F44A72CD-1EF9-4313-B40A-B06FB923955F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06916901-7E05-4467-9214-C774C2B0A84B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06916901-7E05-4467-9214-C774C2B0A84B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06916901-7E05-4467-9214-C774C2B0A84B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06916901-7E05-4467-9214-C774C2B0A84B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
