@@ -3,7 +3,35 @@
 
 <h1>Room Cleaning Admin</h1>
 
-Welcome @rooms.Length
+@if (rooms == null)
+{
+    <p><em>Loading...</em></p>
+}
+
+@if (rooms.Length == 0)
+{
+    <p><em>No Rooms Found.</em></p>
+}
+else
+{
+<table class="table">
+    <thead>
+        <tr>
+            <th>Room Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var room in rooms)
+        {
+            <tr>
+                <td>@room.Id</td>
+              </tr>
+        }
+    </tbody>
+</table>
+}
+
+
 <input placeholder="Filter by..." @oninput="Filter"/>
 <h2>@filter</h2>
 
