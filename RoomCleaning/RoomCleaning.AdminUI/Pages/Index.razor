@@ -14,19 +14,19 @@
 else
 {
 <EditForm EditContext="@editContext" OnSubmit="HandleSubmit">
-    <div >
+    <div>
         <ul class="list-group" style="max-height: 300px; overflow:scroll; margin-bottom: 20px;">
             @foreach (var room in filteredRooms)
             {
-            <li class="list-group-item">
-                <InputCheckbox @bind-Value="room.IsSelected" />
-                @room.DisplayName
-            </li>
+                <li class="list-group-item">
+                    <InputCheckbox @bind-Value="room.IsSelected" />
+                    @room.DisplayName
+                </li>
             }
-            </ul>
+        </ul>
     </div>
-   
-    <p/>
+
+    <p />
     <label>
         Cleaning Time:
         <InputNumber @bind-Value="policy.CleaningTime" />
@@ -44,10 +44,15 @@ else
         <InputRadio name="notification" SelectedValue="RoomCleaning.Shared.Models.NotificationType.Email" @bind-Value="policy.NotificationType" />
 
     </label>
-    <p/>
+    <p />
     <label>
         SMS
         <InputRadio name="notification" SelectedValue="RoomCleaning.Shared.Models.NotificationType.SMS" @bind-Value="policy.NotificationType" />
+
+    </label>
+    <label>
+        SMS
+        <InputText @bind-Value="policy.NotificationAlias" />
 
     </label>
     <p />
