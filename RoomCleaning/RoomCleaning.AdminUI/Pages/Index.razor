@@ -5,12 +5,9 @@
 
 <h3>Room Cleaning Admin</h3>
 <input placeholder="Filter by..." @oninput="Filter" />
-@if (allRooms == null)
-{
-    <p><em>Loading...</em></p>
-}
 
-@if (allRooms.Length == 0)
+
+@if (allRooms == null || allRooms.Length == 0)
 {
     <p><em>No Rooms Found.</em></p>
 }

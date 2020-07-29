@@ -2,6 +2,7 @@
 using RoomCleaning.Shared.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -15,19 +16,24 @@ namespace RoomCleaning.AdminUI.Services
 
         public RoomPolicyService(HttpClient client)
         {
-            _client = client;
+            _client = new HttpClient(); ;
         }
 
         public async Task<Room[]> GetRoomsAsync()
         {
-            var rooms = new List<Room>();
-            for (int i = 0; i < 50; i++)
+                    
+            try
             {
-                var room = new Room() { Id = $"{i}" , DisplayName = $"{i}Room"};
-                rooms.Add(room);
+                var result = await _client.GetAsync("http://localhost:7071/api/rooms");
+                var json = await result.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<Room[]>(json);
+            }
+            catch (Exception ex)
+            {
+
             }
 
-            return rooms.ToArray();
+            return new Room[0];
         }
 
         public async Task<bool> SendPolicyRequest(RoomPolicyRequest request)
