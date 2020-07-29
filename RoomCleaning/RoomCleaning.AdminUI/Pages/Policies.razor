@@ -1,6 +1,101 @@
 ﻿@page "/policies"
-<h3>Subscriptions</h3>
+@inject Blazor.ModalDialog.IModalDialogService ModalDialogService;
+@inject RoomCleaning.AdminUI.Services.RoomPolicyService subService;
+
+<h3>Room Policies In Effect</h3>
+<input placeholder="Filter by..." @oninput="Filter" />
+@if (allPolicies == null)
+{
+    <p><em>Loading...</em></p>
+}
+
+@if (allPolicies.Length == 0)
+{
+    <p><em>No Rooms Found.</em></p>
+}
+else
+{
+<EditForm EditContext="@editContext" OnSubmit="HandleSubmit">
+    <div>
+        <ul class="list-group">
+            @foreach (var policy in filteredPolicies)
+            {
+                <li class="list-group-item" @onclick="@(()=> RoomSelected(policy.CleaningPolicy))"   >
+                    @policy.Room.DisplayName
+                </li>
+            }
+        </ul>
+    </div>
+    <p />
+    <label>
+        Cleaning Time:
+        <InputNumber @bind-Value="selectedPolicy.CleaningTime" />
+    </label>
+    <p />
+    <label>
+        Clean Room Before Meeting?
+        <InputCheckbox @bind-Value="selectedPolicy.CleanBefore" />
+    </label>
+    <p />
+    Notification Type:
+    <p />
+    <label>
+        Email
+        <InputRadio name="notification" SelectedValue="RoomCleaning.Shared.Models.NotificationType.Email" @bind-Value="selectedPolicy.NotificationType" />
+
+    </label>
+    <p />
+    <label>
+        SMS
+        <InputRadio name="notification" SelectedValue="RoomCleaning.Shared.Models.NotificationType.SMS" @bind-Value="selectedPolicy.NotificationType" />
+
+    </label>
+    <p />
+    <button type="submit">Submit</button>
+</EditForm>
+}
+
 
 @code {
+
+    private EditContext editContext;
+    private string filter = "empty";
+
+    private RoomCleaning.Shared.Models.RoomPolicy[] allPolicies;
+    private RoomCleaning.Shared.Models.RoomPolicy[] filteredPolicies;
+
+    private RoomCleaning.Shared.Models.CleaningPolicy selectedPolicy;
+
+    protected override async Task OnInitializedAsync()
+    {
+        selectedPolicy = new RoomCleaning.Shared.Models.CleaningPolicy();
+        editContext = new EditContext(selectedPolicy);
+        allPolicies = filteredPolicies= await subService.GetRoomPoliciesAsync();
+    }
+
+    public void Filter(ChangeEventArgs args)
+    {
+        if (allPolicies is null || allPolicies.Length == 0)
+            return;
+
+        if (args.Value.ToString() == string.Empty)
+            filteredPolicies = allPolicies;
+
+        var filteredList = from p in allPolicies where p.Room.DisplayName.StartsWith(args.Value.ToString()) select p;
+        filteredPolicies = filteredList.ToArray();
+        StateHasChanged();
+    }
+
+    private void RoomSelected(RoomCleaning.Shared.Models.CleaningPolicy policy)
+    {
+        policy.CleaningTime = 10;
+        policy.CleanBefore = true;
+        policy.NotificationType = RoomCleaning.Shared.Models.NotificationType.SMS;
+        policy.NotificationAlias = "6512466149";
+        selectedPolicy = policy;
+    }
+
+    private async Task HandleSubmit()
+    { }
 
 }

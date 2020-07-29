@@ -48,7 +48,7 @@ namespace RoomCleaning.AdminUI.Services
             var policies = new List<RoomPolicy>();
             for (int i = 0; i < 3; i++)
             {
-                var policy = new RoomPolicy() { Policy = new CleaningPolicy(), Room = new Room { Id = $"{i}", DisplayName = $"{i} Room" } };
+                var policy = new RoomPolicy() { CleaningPolicy = new CleaningPolicy(), Room = new Room { Id = $"{i}", DisplayName = $"{i} Room" } };
                 policies.Add(policy);
             }
 
