@@ -2,6 +2,7 @@
 using RoomCleaning.Shared.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -15,19 +16,24 @@ namespace RoomCleaning.AdminUI.Services
 
         public RoomPolicyService(HttpClient client)
         {
-            _client = client;
+            _client = new HttpClient(); ;
         }
 
-        public async Task<Room[]> GetRoomsAsync()
+        public async Task<RoomDetail[]> GetRoomsAsync()
         {
-            var rooms = new List<Room>();
-            for (int i = 0; i < 3; i++)
+                    
+            try
             {
-                var room = new Room() { Id = $"{i}" , DisplayName = $"{i}Room"};
-                rooms.Add(room);
+                var result = await _client.GetAsync("http://localhost:7071/api/rooms");
+                var json = await result.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<RoomDetail[]>(json);
+            }
+            catch (Exception ex)
+            {
+
             }
 
-            return rooms.ToArray();
+            return new RoomDetail[0];
         }
 
         public async Task<bool> SendPolicyRequest(RoomPolicyRequest request)
@@ -48,7 +54,7 @@ namespace RoomCleaning.AdminUI.Services
             var policies = new List<RoomPolicy>();
             for (int i = 0; i < 3; i++)
             {
-                var policy = new RoomPolicy() { CleaningPolicy = new CleaningPolicy(), Room = new Room { Id = $"{i}", DisplayName = $"{i} Room" } };
+                var policy = new RoomPolicy() { CleaningPolicy = new CleaningPolicy(), Room = new RoomDetail { Id = $"{i}", DisplayName = $"{i} Room" } };
                 policies.Add(policy);
             }
 

@@ -5,12 +5,9 @@
 
 <h3>Room Cleaning Admin</h3>
 <input placeholder="Filter by..." @oninput="Filter" />
-@if (allRooms == null)
-{
-    <p><em>Loading...</em></p>
-}
 
-@if (allRooms.Length == 0)
+
+@if (allRooms == null || allRooms.Length == 0)
 {
     <p><em>No Rooms Found.</em></p>
 }
@@ -18,7 +15,7 @@ else
 {
 <EditForm EditContext="@editContext" OnSubmit="HandleSubmit">
     <div >
-        <ul class="list-group">
+        <ul class="list-group" style="max-height: 300px; overflow:scroll; margin-bottom: 20px;">
             @foreach (var room in filteredRooms)
             {
             <li class="list-group-item">
@@ -65,8 +62,8 @@ else
     private EditContext editContext;
     private string filter = "empty";
 
-    private RoomCleaning.Shared.Models.Room[] allRooms;
-    private RoomCleaning.Shared.Models.Room[] filteredRooms;
+    private RoomCleaning.Shared.Models.RoomDetail[] allRooms;
+    private RoomCleaning.Shared.Models.RoomDetail[] filteredRooms;
 
     private RoomCleaning.Shared.Models.CleaningPolicy policy = new RoomCleaning.Shared.Models.CleaningPolicy();
 
@@ -92,7 +89,6 @@ else
 
     private async Task HandleSubmit()
     {
-        filter = "bang";
 
         var selectedRooms = from f in filteredRooms where f.IsSelected select f;
         if (selectedRooms.Count() == 0)
