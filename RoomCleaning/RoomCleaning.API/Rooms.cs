@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
 using RoomCleaning.Shared.Models;
+using System.Web.Http;
 
 namespace RoomCleaning.API
 {
@@ -27,24 +28,30 @@ namespace RoomCleaning.API
                 .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
+            try
+            {
+                var graphServiceClient = Helper.GetGraphClient(config);
 
-            var graphServiceClient = Helper.GetGraphClient(config);
+                //TODO: need to page through results? https://docs.microsoft.com/en-us/graph/sdks/paging?tabs=csharp
+                var rooms = await graphServiceClient
+                    .Places["microsoft.graph.room"]
+                    .Request()
+                    //.Select(p => new { p.Id, p.DisplayName }) 
+                    .GetAsync();
 
-            //TODO: need to page through results? https://docs.microsoft.com/en-us/graph/sdks/paging?tabs=csharp
-            var rooms = await graphServiceClient
-                .Places["microsoft.graph.room"]
-                .Request()
-                //.Select(p => new { p.Id, p.DisplayName }) 
-                .GetAsync();
+                //TODO: this can't be the best/right way to map the graph object to our object...
+                string roomsJson = JsonConvert.SerializeObject(rooms);
 
-            //TODO: this can't be the best/right way to map the graph object to our object...
-            string roomsJson = JsonConvert.SerializeObject(rooms);
+                dynamic obj = JsonConvert.DeserializeObject(roomsJson);
 
-            dynamic obj = JsonConvert.DeserializeObject(roomsJson);
+                Room[] allRooms = JsonConvert.DeserializeObject<Room[]>(JsonConvert.SerializeObject(obj.value));
 
-            Room[] allRooms = JsonConvert.DeserializeObject<Room[]>(JsonConvert.SerializeObject(obj.value));
-
-            return new OkObjectResult(allRooms);
+                return new OkObjectResult(allRooms);
+            }
+            catch (Exception ex)
+            {
+                return new InternalServerErrorResult();
+            }
         }
     }
 }
