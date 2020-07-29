@@ -89,7 +89,7 @@ else
         if (args.Value.ToString() == string.Empty)
             filteredRooms = allRooms;
 
-        var filteredList = from r in allRooms where r.Id.StartsWith(args.Value.ToString()) select r;
+        var filteredList = from r in allRooms where r.DisplayName.StartsWith(args.Value.ToString()) select r;
         filteredRooms = filteredList.ToArray();
         StateHasChanged();
     }
