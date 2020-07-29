@@ -90,7 +90,7 @@ else
     private async Task HandleSubmit()
     {
 
-        var selectedRooms = from f in filteredRooms where f.IsSelected select f;
+        var selectedRooms = from f in filteredRooms where f.IsSelected select new RoomCleaning.Shared.Models.Room { Id = f.Id, Email = f.EmailAddress };
         if (selectedRooms.Count() == 0)
         {
             var parameters = new ModalDialogParameters();
