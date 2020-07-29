@@ -89,7 +89,6 @@ else
 
     private async Task HandleSubmit()
     {
-        filter = "bang";
 
         var selectedRooms = from f in filteredRooms where f.IsSelected select f;
         if (selectedRooms.Count() == 0)
