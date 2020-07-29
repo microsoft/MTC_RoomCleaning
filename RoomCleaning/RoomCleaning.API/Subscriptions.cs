@@ -22,38 +22,42 @@ namespace RoomCleaning.API
         {
             log.LogInformation("Subscriptions HTTP trigger function processed a request.");
 
-            RoomPolicyRequest roomPolicyRequest = null; //TODO: get from request
-
-            var config = new ConfigurationBuilder()
-                .SetBasePath(context.FunctionAppDirectory)
-                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
-
-            // config settings
-            int maxSubscriptionLength = Convert.ToInt32(config["SubscriptionLength"]); // https://docs.microsoft.com/en-us/graph/api/resources/subscription?view=graph-rest-beta
-
-            var graphServiceClient = Helper.GetGraphClient(config);
-
-            foreach (Room room in roomPolicyRequest.Rooms)
+            using (StreamReader reader = new StreamReader(req.Body))
             {
-                var sub = new Microsoft.Graph.Subscription()
+                string content = await reader.ReadToEndAsync();
+                var roomPolicyRequest = JsonConvert.DeserializeObject<RoomPolicyRequest>(content);
+
+                var config = new ConfigurationBuilder()
+                    .SetBasePath(context.FunctionAppDirectory)
+                    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+                    .AddEnvironmentVariables()
+                    .Build();
+
+                // config settings
+                int maxSubscriptionLength = Convert.ToInt32(config["SubscriptionLength"]); // https://docs.microsoft.com/en-us/graph/api/resources/subscription?view=graph-rest-beta
+
+                var graphServiceClient = Helper.GetGraphClient(config);
+
+                foreach (Room room in roomPolicyRequest.Rooms)
                 {
-                    ChangeType = "created,updated,deleted",
-                    NotificationUrl = config["notificationsUrl"],
-                    Resource = $"/users/{room.Id}/events",
-                    ExpirationDateTime = DateTime.UtcNow.AddMinutes(maxSubscriptionLength),
-                    ClientState = "SecretClientState"
-                };
+                    var sub = new Microsoft.Graph.Subscription()
+                    {
+                        ChangeType = "created,updated,deleted",
+                        NotificationUrl = config["notificationsUrl"],
+                        Resource = $"/users/{room.EmailAddress}/events",    //TOOD: I'd like to use Id, but the Places/Room.Id is not the same as User.Id
+                        ExpirationDateTime = DateTime.UtcNow.AddMinutes(maxSubscriptionLength),
+                        ClientState = "SecretClientState"
+                    };
 
-                var newSubscription = await graphServiceClient
-                  .Subscriptions
-                  .Request()
-                  .AddAsync(sub);
+                    var newSubscription = await graphServiceClient
+                      .Subscriptions
+                      .Request()
+                      .AddAsync(sub);
 
-                //TODO: check subscription response
+                        //TODO: check subscription response
 
-                //TODO: store room/subscription
+                        //TODO: store room/subscription
+                }
             }
 
             //return $"Subscribed. Id: {newSubscription.Id}, Expiration: {newSubscription.ExpirationDateTime}";
