@@ -17,22 +17,18 @@
 else
 {
 <EditForm EditContext="@editContext" OnSubmit="HandleSubmit">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Room Name</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div >
+        <ul class="list-group">
             @foreach (var room in filteredRooms)
             {
-                <tr>
-                    <td> <InputCheckbox @bind-Value="room.IsSelected" /></td>
-                    <td>@room.DisplayName</td>
-                </tr>
+            <li class="list-group-item">
+                <InputCheckbox @bind-Value="room.IsSelected" />
+                @room.DisplayName
+            </li>
             }
-        </tbody>
-    </table>
+            </ul>
+    </div>
+   
     <p/>
     <label>
         Cleaning Time:
