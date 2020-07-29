@@ -61,5 +61,8 @@ namespace RoomCleaning.Shared.Models
 
         [JsonProperty(PropertyName = "tags")]
         public string[] Tags { get; set; }
+
+        [JsonIgnore]
+        public bool IsSelected { get; set; }
     }
 }
