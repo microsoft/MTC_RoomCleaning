@@ -21,7 +21,7 @@ namespace RoomCleaning.AdminUI.Services
         public async Task<Room[]> GetRoomsAsync()
         {
             var rooms = new List<Room>();
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 50; i++)
             {
                 var room = new Room() { Id = $"{i}" , DisplayName = $"{i}Room"};
                 rooms.Add(room);
