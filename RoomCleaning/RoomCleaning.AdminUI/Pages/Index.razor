@@ -18,7 +18,7 @@ else
 {
 <EditForm EditContext="@editContext" OnSubmit="HandleSubmit">
     <div >
-        <ul class="list-group">
+        <ul class="list-group" style="max-height: 300px; overflow:scroll; margin-bottom: 20px;">
             @foreach (var room in filteredRooms)
             {
             <li class="list-group-item">
