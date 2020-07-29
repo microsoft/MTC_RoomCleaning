@@ -42,5 +42,17 @@ namespace RoomCleaning.AdminUI.Services
 
             return true;
         }
+
+        public async Task<RoomPolicy[]> GetRoomPoliciesAsync()
+        {
+            var policies = new List<RoomPolicy>();
+            for (int i = 0; i < 3; i++)
+            {
+                var policy = new RoomPolicy() { Policy = new CleaningPolicy(), Room = new Room { Id = $"{i}", DisplayName = $"{i} Room" } };
+                policies.Add(policy);
+            }
+
+            return policies.ToArray();
+        }
     }
 }
