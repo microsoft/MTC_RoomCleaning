@@ -30,7 +30,7 @@ namespace RoomCleaning.API
 
             var graphServiceClient = Helper.GetGraphClient(config);
 
-            //TODO: need to page through results?
+            //TODO: need to page through results? https://docs.microsoft.com/en-us/graph/sdks/paging?tabs=csharp
             var rooms = await graphServiceClient
                 .Places["microsoft.graph.room"]
                 .Request()
