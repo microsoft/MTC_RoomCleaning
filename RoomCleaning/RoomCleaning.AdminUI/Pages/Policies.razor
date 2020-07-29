@@ -15,49 +15,44 @@
 }
 else
 {
-    <EditForm EditContext="@editContext" OnSubmit="HandleSubmit">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Room Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var policy in filteredPolicies)
-                {
-                    <tr>
-                        <td>@policy.Room.DisplayName</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <p />
-        <label>
-            Cleaning Time:
-            <InputNumber @bind-Value="selectedPolicy.CleaningTime" />
-        </label>
-        <p />
-        <label>
-            Clean Room Before Meeting?
-            <InputCheckbox @bind-Value="selectedPolicy.CleanBefore" />
-        </label>
-        <p />
-        Notification Type:
-        <p />
-        <label>
-            Email
-            <InputRadio name="notification" SelectedValue="RoomCleaning.Shared.Models.NotificationType.Email" @bind-Value="selectedPolicy.NotificationType" />
+<EditForm EditContext="@editContext" OnSubmit="HandleSubmit">
+    <div>
+        <ul class="list-group">
+            @foreach (var policy in filteredPolicies)
+            {
+                <li class="list-group-item" @onclick="RoomSelected">
+                    @policy.Room.DisplayName
+                </li>
+            }
+        </ul>
+    </div>
+    <p />
+    <label>
+        Cleaning Time:
+        <InputNumber @bind-Value="selectedPolicy.CleaningTime" />
+    </label>
+    <p />
+    <label>
+        Clean Room Before Meeting?
+        <InputCheckbox @bind-Value="selectedPolicy.CleanBefore" />
+    </label>
+    <p />
+    Notification Type:
+    <p />
+    <label>
+        Email
+        <InputRadio name="notification" SelectedValue="RoomCleaning.Shared.Models.NotificationType.Email" @bind-Value="selectedPolicy.NotificationType" />
 
-        </label>
-        <p />
-        <label>
-            SMS
-            <InputRadio name="notification" SelectedValue="RoomCleaning.Shared.Models.NotificationType.SMS" @bind-Value="selectedPolicy.NotificationType" />
+    </label>
+    <p />
+    <label>
+        SMS
+        <InputRadio name="notification" SelectedValue="RoomCleaning.Shared.Models.NotificationType.SMS" @bind-Value="selectedPolicy.NotificationType" />
 
-        </label>
-        <p />
-        <button type="submit">Submit</button>
-    </EditForm>
+    </label>
+    <p />
+    <button type="submit">Submit</button>
+</EditForm>
 }
 
 
@@ -71,6 +66,13 @@ else
 
     private RoomCleaning.Shared.Models.CleaningPolicy selectedPolicy;
 
+    protected override async Task OnInitializedAsync()
+    {
+        selectedPolicy = new RoomCleaning.Shared.Models.CleaningPolicy();
+        editContext = new EditContext(selectedPolicy);
+        allPolicies = filteredPolicies= await subService.GetRoomPoliciesAsync();
+    }
+
     public void Filter(ChangeEventArgs args)
     {
         if (allPolicies is null || allPolicies.Length == 0)
@@ -82,6 +84,11 @@ else
         var filteredList = from p in allPolicies where p.Room.DisplayName.StartsWith(args.Value.ToString()) select p;
         filteredPolicies = filteredList.ToArray();
         StateHasChanged();
+    }
+
+    private void RoomSelected(MouseEventArgs args)
+    {
+        selectedPolicy.CleaningTime = 10;
     }
 
     private async Task HandleSubmit()
