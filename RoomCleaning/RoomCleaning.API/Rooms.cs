@@ -44,7 +44,7 @@ namespace RoomCleaning.API
 
                 dynamic obj = JsonConvert.DeserializeObject(roomsJson);
 
-                Room[] allRooms = JsonConvert.DeserializeObject<Room[]>(JsonConvert.SerializeObject(obj.value));
+                RoomDetail[] allRooms = JsonConvert.DeserializeObject<RoomDetail[]>(JsonConvert.SerializeObject(obj.value));
 
                 return new OkObjectResult(allRooms);
             }

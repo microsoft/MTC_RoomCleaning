@@ -19,21 +19,21 @@ namespace RoomCleaning.AdminUI.Services
             _client = new HttpClient(); ;
         }
 
-        public async Task<Room[]> GetRoomsAsync()
+        public async Task<RoomDetail[]> GetRoomsAsync()
         {
                     
             try
             {
                 var result = await _client.GetAsync("http://localhost:7071/api/rooms");
                 var json = await result.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<Room[]>(json);
+                return JsonConvert.DeserializeObject<RoomDetail[]>(json);
             }
             catch (Exception ex)
             {
 
             }
 
-            return new Room[0];
+            return new RoomDetail[0];
         }
 
         public async Task<bool> SendPolicyRequest(RoomPolicyRequest request)
@@ -54,7 +54,7 @@ namespace RoomCleaning.AdminUI.Services
             var policies = new List<RoomPolicy>();
             for (int i = 0; i < 3; i++)
             {
-                var policy = new RoomPolicy() { CleaningPolicy = new CleaningPolicy(), Room = new Room { Id = $"{i}", DisplayName = $"{i} Room" } };
+                var policy = new RoomPolicy() { CleaningPolicy = new CleaningPolicy(), Room = new RoomDetail { Id = $"{i}", DisplayName = $"{i} Room" } };
                 policies.Add(policy);
             }
 
