@@ -7,6 +7,6 @@ namespace RoomCleaning.Shared.Models
     public class RoomPolicy
     {
         public Room Room { get; set; }
-        public CleaningPolicy Policy { get; set; }
+        public CleaningPolicy CleaningPolicy { get; set; }
     }
 }
