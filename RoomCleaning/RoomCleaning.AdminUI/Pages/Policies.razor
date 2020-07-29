@@ -94,10 +94,15 @@ else
 
     private void RoomSelected(RoomCleaning.Shared.Models.CleaningPolicy policy)
     {
-       
+        selectedPolicy = policy;
     }
 
     private async Task HandleSubmit()
-    { }
+    {
+        var request = new RoomCleaning.Shared.Models.RoomPolicyRequest()
+        {
+
+        };
+    }
 
 }
