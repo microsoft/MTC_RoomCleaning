@@ -44,7 +44,7 @@ namespace RoomCleaning.API
                     {
                         ChangeType = "created,updated,deleted",
                         NotificationUrl = config["notificationsUrl"],
-                        Resource = $"/users/{room.EmailAddress}/events",    //TOOD: I'd like to use Id, but the Places/Room.Id is not the same as User.Id
+                        Resource = $"/users/{room.Email}/events",    //TOOD: I'd like to use Id, but the Places/Room.Id is not the same as User.Id
                         ExpirationDateTime = DateTime.UtcNow.AddMinutes(maxSubscriptionLength),
                         ClientState = "SecretClientState"
                     };

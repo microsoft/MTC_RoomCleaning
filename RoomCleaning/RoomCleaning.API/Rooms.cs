@@ -39,6 +39,8 @@ namespace RoomCleaning.API
                     //.Select(p => new { p.Id, p.DisplayName }) 
                     .GetAsync();
 
+                //TODO: the id we get here is not the same as the user id we could/need use later
+
                 //TODO: this can't be the best/right way to map the graph object to our object...
                 string roomsJson = JsonConvert.SerializeObject(rooms);
 
