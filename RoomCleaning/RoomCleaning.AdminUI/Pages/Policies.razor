@@ -17,10 +17,10 @@ else
 {
 <EditForm EditContext="@editContext" OnSubmit="HandleSubmit">
     <div>
-        <ul class="list-group">
+        <ul class="list-group" style="max-height: 300px; overflow:scroll; margin-bottom: 20px;">
             @foreach (var policy in filteredPolicies)
             {
-                <li class="list-group-item" @onclick="@(()=> RoomSelected(policy.CleaningPolicy))"   >
+                <li class="list-group-item" @onclick="@(()=> RoomSelected(policy.CleaningPolicy))">
                     @policy.Room.DisplayName
                 </li>
             }
@@ -48,6 +48,12 @@ else
     <label>
         SMS
         <InputRadio name="notification" SelectedValue="RoomCleaning.Shared.Models.NotificationType.SMS" @bind-Value="selectedPolicy.NotificationType" />
+
+    </label>
+    <p />
+    <label>
+        Email or Phone Number:
+        <InputText @bind-Value="selectedPolicy.NotificationAlias" />
 
     </label>
     <p />
@@ -88,14 +94,15 @@ else
 
     private void RoomSelected(RoomCleaning.Shared.Models.CleaningPolicy policy)
     {
-        policy.CleaningTime = 10;
-        policy.CleanBefore = true;
-        policy.NotificationType = RoomCleaning.Shared.Models.NotificationType.SMS;
-        policy.NotificationAlias = "6512466149";
         selectedPolicy = policy;
     }
 
     private async Task HandleSubmit()
-    { }
+    {
+        var request = new RoomCleaning.Shared.Models.RoomPolicyRequest()
+        {
+
+        };
+    }
 
 }
