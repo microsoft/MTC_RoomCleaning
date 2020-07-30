@@ -14,7 +14,7 @@ namespace RoomCleaning.API
     public static class RenewSubscriptions
     {
         [FunctionName("RenewSubscriptions")]
-        public static void Run([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer, ExecutionContext context, ILogger log,
+        public static void Run([TimerTrigger("0 */30 * * * *")]TimerInfo myTimer, ExecutionContext context, ILogger log,
             [CosmosDB(
                 databaseName: "RoomCleaning",
                 collectionName: "Subscriptions",
