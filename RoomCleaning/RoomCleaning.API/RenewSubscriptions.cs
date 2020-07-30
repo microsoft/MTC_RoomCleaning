@@ -39,19 +39,19 @@ namespace RoomCleaning.API
         {
             Console.WriteLine($"Current subscription: {subscription.Id}, Expiration: {subscription.Expiration}");
 
-            DateTimeOffset newExpiration = DateTime.UtcNow.AddMinutes(subscriptionLength);
+            //DateTimeOffset newExpiration = DateTime.UtcNow.AddMinutes(subscriptionLength);
 
-            var newSubscription = new Microsoft.Graph.Subscription
+            var updatedSubscription = new Microsoft.Graph.Subscription
             {
-                ExpirationDateTime = newExpiration
+                ExpirationDateTime = DateTime.UtcNow.AddMinutes(subscriptionLength) //newExpiration
             };
 
             await graphServiceClient
               .Subscriptions[subscription.Id]
               .Request()
-              .UpdateAsync(newSubscription);
+              .UpdateAsync(updatedSubscription);
 
-            subscription.Expiration = newExpiration;
+            subscription.Expiration = updatedSubscription.ExpirationDateTime;// newExpiration;
 
             //TODO: update subscription in DB
             Console.WriteLine($"Renewed subscription: {subscription.Id}, New Expiration: {subscription.Expiration}");

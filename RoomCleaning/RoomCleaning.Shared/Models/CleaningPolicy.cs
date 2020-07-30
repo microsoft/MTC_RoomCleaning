@@ -14,7 +14,7 @@ namespace RoomCleaning.Shared.Models
     public class CleaningPolicy
     {
         public int CleaningTime { get; set; } = 30;
-        public bool CleanBefore { get; set; } = false;
+        public bool CleanAfter { get; set; } = false;
         public NotificationType NotificationType { get; set; } = NotificationType.Email;
         public string NotificationAlias { get; set; } = string.Empty;
     }
