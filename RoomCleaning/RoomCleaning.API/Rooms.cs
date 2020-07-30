@@ -23,11 +23,8 @@ namespace RoomCleaning.API
         {
             log.LogInformation("Rooms HTTP trigger function processed a request.");
 
-            var config = new ConfigurationBuilder()
-                .SetBasePath(context.FunctionAppDirectory)
-                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
+            var config = Helper.GetConfig(context);
+
             try
             {
                 var graphServiceClient = Helper.GetGraphClient(config);

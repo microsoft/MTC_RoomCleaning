@@ -38,11 +38,7 @@ namespace RoomCleaning.API
             // handle notifications
             using (StreamReader reader = new StreamReader(req.Body))
             {
-                var config = new ConfigurationBuilder()
-                    .SetBasePath(context.FunctionAppDirectory)
-                    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                    .AddEnvironmentVariables()
-                    .Build();
+                var config = Helper.GetConfig(context);
 
                 // config settings
                 string cleanupSubject = config["CleaningMeetingSubject"];
@@ -85,7 +81,6 @@ namespace RoomCleaning.API
                             Content = cleanupBody
                         };
 
-                        //TODO: invite cleanup alias
                         cleanup.Attendees = new Attendee[] { new Attendee { EmailAddress = new EmailAddress { Address = cleanupEmailAddress }, Type = AttendeeType.Required } };
 
                         if (cleanAfterMeeting)

@@ -27,11 +27,7 @@ namespace RoomCleaning.API
                 string content = await reader.ReadToEndAsync();
                 var roomPolicyRequest = JsonConvert.DeserializeObject<RoomPolicyRequest>(content);
 
-                var config = new ConfigurationBuilder()
-                    .SetBasePath(context.FunctionAppDirectory)
-                    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                    .AddEnvironmentVariables()
-                    .Build();
+                var config = Helper.GetConfig(context);
 
                 // config settings
                 int maxSubscriptionLength = Convert.ToInt32(config["SubscriptionLength"]); // https://docs.microsoft.com/en-us/graph/api/resources/subscription?view=graph-rest-beta
