@@ -6,7 +6,7 @@ namespace RoomCleaning.Shared.Models
 {
     public class Subscription
     {
-        public string SubId { get; set; }
+        public string Id { get; set; }
         public DateTimeOffset Expiration { get; set; }
         public RoomPolicy RoomPolicy { get; set; }
     }

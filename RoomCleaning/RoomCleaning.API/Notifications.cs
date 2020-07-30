@@ -44,6 +44,7 @@ namespace RoomCleaning.API
                 string cleanupSubject = config["CleaningMeetingSubject"];
                 string cleanupBody = config["CleaningMeetingBody"];
                 string cleanupEmailAddress = config["CleaningCrewEmailAddress"];
+                //TODO: get duration and before/after from policy in DB
                 int cleanupDuration = Convert.ToInt32(config["CleaningMeetingDuration"]);   // minutes
                 bool cleanAfterMeeting = Convert.ToBoolean(config["CleaningMeetingAfter"]);  // true = after, false = before
 

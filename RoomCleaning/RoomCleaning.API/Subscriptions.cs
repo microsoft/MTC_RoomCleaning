@@ -30,7 +30,7 @@ namespace RoomCleaning.API
                 var config = Helper.GetConfig(context);
 
                 // config settings
-                int maxSubscriptionLength = Convert.ToInt32(config["SubscriptionLength"]); // https://docs.microsoft.com/en-us/graph/api/resources/subscription?view=graph-rest-beta
+                int subscriptionLength = Convert.ToInt32(config["SubscriptionLength"]); // https://docs.microsoft.com/en-us/graph/api/resources/subscription?view=graph-rest-beta
 
                 var graphServiceClient = Helper.GetGraphClient(config);
 
@@ -41,7 +41,7 @@ namespace RoomCleaning.API
                         ChangeType = "created,updated,deleted",
                         NotificationUrl = config["notificationsUrl"],
                         Resource = $"/users/{room.Email}/events",    //TOOD: I'd like to use Id, but the Places/Room.Id is not the same as User.Id
-                        ExpirationDateTime = DateTime.UtcNow.AddMinutes(maxSubscriptionLength),
+                        ExpirationDateTime = DateTime.UtcNow.AddMinutes(subscriptionLength),
                         ClientState = "SecretClientState"
                     };
 
