@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Net.NetworkInformation;
+using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +14,16 @@ namespace RoomCleaning.API
     public static class RenewSubscriptions
     {
         [FunctionName("RenewSubscriptions")]
-        public static void Run([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer, ExecutionContext context, ILogger log)
+        public static void Run([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer, ExecutionContext context, ILogger log,
+            [CosmosDB(
+                databaseName: "RoomCleaning",
+                collectionName: "Subscriptions",
+                ConnectionStringSetting = "DatabaseConnection",
+                SqlQuery = "select * from Subscriptions")] IEnumerable<Shared.Models.Subscription> subscriptions,
+            [CosmosDB(
+                databaseName: "RoomCleaning",
+                collectionName: "Subscriptions",
+                ConnectionStringSetting = "DatabaseConnection")] DocumentClient documentClient)
         {
             log.LogInformation($"RenewSubscriptions Timer trigger function executed at: {DateTime.Now}");
 
@@ -22,39 +34,51 @@ namespace RoomCleaning.API
 
             var graphServiceClient = Helper.GetGraphClient(config);
 
-            //TODO: get all subscriptions from DB
-            Shared.Models.Subscription[] subs = new Shared.Models.Subscription[] { };
-
-            foreach(Shared.Models.Subscription sub in subs)
+            // loop through all subscriptions from DB
+            foreach(Shared.Models.Subscription sub in subscriptions)
             {
                 // if the subscription expires in the next X min, renew it
                 if (sub.Expiration < DateTime.UtcNow.AddMinutes(expirationCheck))
                 {
-                    RenewSubscription(sub, graphServiceClient, subscriptionLength);
+                    try
+                    {
+                        log.LogInformation($"Current subscription: {sub.Id}, Expiration: {sub.Expiration}");
+
+                        DateTimeOffset newExpiration = DateTime.UtcNow.AddMinutes(subscriptionLength);
+                        sub.Expiration = newExpiration; // replace expiration
+                        // update graph
+                        RenewSubscription(graphServiceClient, sub);
+                        // update db
+                        UpdateSubscription(documentClient, sub);
+
+                        log.LogInformation($"Renewed subscription: {sub.Id}, New Expiration: {sub.Expiration}");
+                    }
+                    catch(Exception ex)
+                    {
+                        //TODO: need to deal with the renew graph call not working (this won't catch a failure)
+                        log.LogInformation("Failed to renew subscription: " + ex.Message);
+                    }
                 }
             }
         }
 
-        private static async void RenewSubscription(Shared.Models.Subscription subscription, GraphServiceClient graphServiceClient, int subscriptionLength)
+        private static async void UpdateSubscription(DocumentClient documentClient, Shared.Models.Subscription subscription)
         {
-            Console.WriteLine($"Current subscription: {subscription.Id}, Expiration: {subscription.Expiration}");
+            Uri documentUri = UriFactory.CreateDocumentUri("RoomCleaning", "Subscriptions", subscription.Id);
+            await documentClient.ReplaceDocumentAsync(documentUri, subscription);
+        }
 
-            //DateTimeOffset newExpiration = DateTime.UtcNow.AddMinutes(subscriptionLength);
-
+        private static async void RenewSubscription(GraphServiceClient graphServiceClient, Shared.Models.Subscription subscription)
+        {
             var updatedSubscription = new Microsoft.Graph.Subscription
             {
-                ExpirationDateTime = DateTime.UtcNow.AddMinutes(subscriptionLength) //newExpiration
+                ExpirationDateTime = subscription.Expiration
             };
 
             await graphServiceClient
-              .Subscriptions[subscription.Id]
-              .Request()
-              .UpdateAsync(updatedSubscription);
-
-            subscription.Expiration = updatedSubscription.ExpirationDateTime;// newExpiration;
-
-            //TODO: update subscription in DB
-            Console.WriteLine($"Renewed subscription: {subscription.Id}, New Expiration: {subscription.Expiration}");
+                .Subscriptions[subscription.Id]
+                .Request()
+                .UpdateAsync(updatedSubscription);
         }
     }
 }

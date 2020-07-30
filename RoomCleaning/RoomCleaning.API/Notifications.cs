@@ -24,14 +24,12 @@ namespace RoomCleaning.API
         {
             log.LogInformation("Notifications HTTP function processed a request.");
 
-            Console.WriteLine("START POST");
-
             // handle validation
             string validationToken = req.Query["validationToken"];
 
             if (!string.IsNullOrEmpty(validationToken))
             {
-                Console.WriteLine($"Received Token: '{validationToken}'");
+                log.LogInformation($"Received Token: '{validationToken}'");
                 return new OkObjectResult(validationToken);
             }
 
@@ -58,7 +56,7 @@ namespace RoomCleaning.API
 
                 foreach (var notification in notifications.Items)
                 {
-                    Console.WriteLine($"Received notification: '{notification.Resource}', {notification.ResourceData?.Id}");
+                    log.LogInformation($"Received notification: '{notification.Resource}', {notification.ResourceData?.Id}");
 
                     // make a graph call to get event details (we only get limited info in the notification)
                     var userId = notification.Resource.Split("/")[1];
@@ -68,7 +66,7 @@ namespace RoomCleaning.API
                         .Request()
                         .GetAsync();
 
-                    Console.WriteLine($"Event: '{calendarEvent.Subject}', Ends: '{calendarEvent.End.ToDateTime():s}'");
+                    log.LogInformation($"Event: '{calendarEvent.Subject}', Ends: '{calendarEvent.End.ToDateTime():s}'");
 
                     if (!calendarEvent.Subject.Equals(cleanupSubject))
                     {
@@ -108,7 +106,7 @@ namespace RoomCleaning.API
                 }
             }
 
-            Console.WriteLine("END POST");
+            log.LogInformation("END Notification");
 
             return new OkResult();
         }
