@@ -130,7 +130,8 @@ namespace RoomCleaning.API
                                 {
                                     Id = newEvent.Id,
                                     Start = newEvent.Start.ToDateTimeOffset(),
-                                    End = newEvent.End.ToDateTimeOffset()
+                                    End = newEvent.End.ToDateTimeOffset(),
+                                    Subject = newEvent.Subject
                                 },
                                 Created = DateTime.UtcNow,
                                 Modified = DateTime.UtcNow
