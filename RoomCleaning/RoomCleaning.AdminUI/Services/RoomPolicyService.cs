@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Components.WebAssembly.Http;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using RoomCleaning.Shared.Models;
 using System;
 using System.Collections.Generic;
@@ -13,12 +15,16 @@ namespace RoomCleaning.AdminUI.Services
     public class RoomPolicyService
     {
         private readonly HttpClient _client;
+        private readonly IConfiguration _config;
 
-        public string BaseUri => (_client.BaseAddress == null).ToString();
+        public string BaseUri => _config["authKey"];
 
-        public RoomPolicyService(HttpClient client)
+        public RoomPolicyService(HttpClient client, IConfiguration config)
         {
             _client = client;
+            _config = config;
+            //_client.DefaultRequestHeaders.Add("x-functions-key", _config["authKey"]);
+           
         }
 
         public async Task<RoomDetail[]> GetRoomsAsync()
@@ -26,7 +32,12 @@ namespace RoomCleaning.AdminUI.Services
                     
             try
             {
-                var result = await _client.GetAsync("/api/rooms");
+                var code = _config["authKey"];
+                var request = new HttpRequestMessage() { Method = HttpMethod.Get, RequestUri = new Uri($"{_client.BaseAddress}api/rooms") };
+                request.Headers.Add("x-functions-key", code);
+           
+                var result = await _client.SendAsync(request);
+                var status = result.StatusCode;
                 var json = await result.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<RoomDetail[]>(json);
             }
