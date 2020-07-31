@@ -11,5 +11,7 @@ namespace RoomCleaning.Shared.Models
         public DateTimeOffset Start { get; set; }
 
         public DateTimeOffset End { get; set; }
+
+        public string Subject { get; set; }
     }
 }
