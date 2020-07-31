@@ -20,7 +20,7 @@ namespace RoomCleaning.AdminUI
             builder.RootComponents.Add<App>("app");
             
             
-            var baseApi_Uri = new Uri(builder.Configuration["baseApi_uri"]);
+            var baseApi_Uri = new Uri(builder.Configuration["baseApi_Uri"]);
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = baseApi_Uri });
             builder.Services.AddHttpClient<RoomPolicyService>(service => service.BaseAddress = baseApi_Uri);
             builder.Services.AddModalDialog();

@@ -4,7 +4,7 @@
 
 
 <h3>Room Cleaning Admin</h3>
-<input placeholder="Filter by..." @oninput="Filter" />
+<input placeholder="Filter by..." @oninput="Filter" @bind-value="filter" />
 
 
 @if (allRooms == null || allRooms.Length == 0)
@@ -88,6 +88,7 @@ else
     {
         policy = new RoomCleaning.Shared.Models.CleaningPolicy();
         editContext = new EditContext(policy);
+        filter = "bang " + subService.BaseUri;
         allRooms = filteredRooms = await subService.GetRoomsAsync();
     }
 
@@ -116,7 +117,7 @@ else
     private async Task HandleSubmit()
     {
 
-        var selectedRooms = from f in filteredRooms where f.IsSelected select new RoomCleaning.Shared.Models.Room { Id = f.Id, Email = f.EmailAddress };
+        var selectedRooms = from f in filteredRooms where f.IsSelected select new RoomCleaning.Shared.Models.Room { Id = f.Id, Email = f.EmailAddress, DisplayName = f.DisplayName };
         if (selectedRooms.Count() == 0)
         {
             var parameters = new ModalDialogParameters();

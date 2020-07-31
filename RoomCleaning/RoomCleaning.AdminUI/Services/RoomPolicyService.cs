@@ -14,9 +14,11 @@ namespace RoomCleaning.AdminUI.Services
     {
         private readonly HttpClient _client;
 
+        public string BaseUri => (_client.BaseAddress == null).ToString();
+
         public RoomPolicyService(HttpClient client)
         {
-            _client = new HttpClient(); ;
+            _client = client;
         }
 
         public async Task<RoomDetail[]> GetRoomsAsync()
@@ -24,7 +26,7 @@ namespace RoomCleaning.AdminUI.Services
                     
             try
             {
-                var result = await _client.GetAsync("http://localhost:7071/api/rooms");
+                var result = await _client.GetAsync("/api/rooms");
                 var json = await result.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<RoomDetail[]>(json);
             }
@@ -45,8 +47,8 @@ namespace RoomCleaning.AdminUI.Services
                 throw new ArgumentNullException($"{nameof(request.Rooms)} and/or{nameof(request.Policy)} cannot be null");
 
             var json = JsonConvert.SerializeObject(request);
-
-            return true;
+            var result = await _client.PostAsync("/api/subscriptions", new StringContent(json));
+            return result.StatusCode == System.Net.HttpStatusCode.OK;
         }
 
         public async Task<RoomPolicy[]> GetRoomPoliciesAsync()

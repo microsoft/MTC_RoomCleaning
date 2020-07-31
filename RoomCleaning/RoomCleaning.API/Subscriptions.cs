@@ -69,10 +69,11 @@ namespace RoomCleaning.API
                             Expiration = newSubscription.ExpirationDateTime,
                             RoomPolicy = new RoomPolicy
                             {
-                                Room = new Shared.Models.Room
+                                Room = new Shared.Models.RoomDetail
                                 {
                                     //Id = room.Id, //TODO: add it back when we have the user.Id, not the places/room.Id
-                                    Email = room.Email
+                                    EmailAddress = room.Email,
+                                    DisplayName = room.DisplayName
                                 },
                                 CleaningPolicy = roomPolicyRequest.Policy
                             }

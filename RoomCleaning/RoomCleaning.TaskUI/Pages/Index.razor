@@ -1,9 +1,59 @@
 ﻿@page "/"
-
+@inject RoomCleaning.TaskUI.Services.CleaningScheduleService CleaningScheduleService;
 <h1>Room Cleaning Tasks</h1>
 
 Welcome
+<input placeholder="Filter by..." @oninput="Filter" @bind-value="filter"/>
+@if (allPolicies == null || allPolicies.Length == 0)
+{
+    <p><em>No Tasks Found.</em></p>
+}
+else
+{
+    <div>
+        <div style="display: inline-block; text-align: right; width: 100%">
+
+           
+        </div>
+        <ul class="list-group" style="max-height: 300px; overflow:scroll; margin-bottom: 20px;">
+            @foreach (var policy in filteredPolicies)
+            {
+                <li class="list-group-item">
+                    @policy.RoomPolicy.Room.DisplayName
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+@code {
+    private bool applyToAll = false;
+    private string filter = "test"; // string.Empty;
+
+    private RoomCleaning.Shared.Models.Subscription[] allPolicies;
+    private RoomCleaning.Shared.Models.Subscription[] filteredPolicies;
+
+    private RoomCleaning.Shared.Models.CleaningPolicy selectedPolicy = new RoomCleaning.Shared.Models.CleaningPolicy();
+
+    protected override async Task OnInitializedAsync()
+    {
+        allPolicies = filteredPolicies = await CleaningScheduleService.GetPoliciesAsync();
+        //filter = await CleaningScheduleService.GetPoliciesAsync(); ; // $"{ allPolicies.Length}";
+    }
 
 
 
+    public void Filter(ChangeEventArgs args)
+    {
+        if (allPolicies is null || allPolicies.Length == 0)
+            return;
 
+        if (args.Value.ToString() == string.Empty)
+            filteredPolicies = allPolicies;
+
+        var filteredList = from r in allPolicies where r.RoomPolicy.Room.DisplayName.Contains(args.Value.ToString()) select r;
+        filteredPolicies= filteredList.ToArray();
+        StateHasChanged();
+    }
+
+}
