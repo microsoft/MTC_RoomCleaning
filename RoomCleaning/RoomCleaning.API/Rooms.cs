@@ -31,9 +31,8 @@ namespace RoomCleaning.API
 
                 //TODO: need to page through results? https://docs.microsoft.com/en-us/graph/sdks/paging?tabs=csharp
                 var rooms = await graphServiceClient
-                    .Places["microsoft.graph.room"]
+                    .Places["microsoft.graph.room?$top=1000"]   // hack: graph won't accept the .Top() method because it thinks we are working with an item and not a list of items, so I just put the query string param in here
                     .Request()
-                    //.Select(p => new { p.Id, p.DisplayName }) 
                     .GetAsync();
 
                 //TODO: the id we get here is not the same as the user id we could/need use later
