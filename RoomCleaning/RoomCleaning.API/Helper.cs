@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
 using System.Net.Http.Headers;
@@ -37,6 +38,15 @@ namespace RoomCleaning.API
             var result = await app.AcquireTokenForClient(scopes).ExecuteAsync();
 
             return result.AccessToken;
+        }
+
+        public static IConfigurationRoot GetConfig(ExecutionContext context)
+        {
+            return new ConfigurationBuilder()
+                    .SetBasePath(context.FunctionAppDirectory)
+                    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+                    .AddEnvironmentVariables()
+                    .Build();
         }
     }
 }
