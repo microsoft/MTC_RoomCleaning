@@ -88,7 +88,6 @@ else
     {
         policy = new RoomCleaning.Shared.Models.CleaningPolicy();
         editContext = new EditContext(policy);
-        filter = "bang " + subService.BaseUri;
         allRooms = filteredRooms = await subService.GetRoomsAsync();
     }
 
