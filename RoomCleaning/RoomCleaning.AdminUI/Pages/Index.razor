@@ -42,7 +42,7 @@ else
     <p />
     <label>
         Clean Room Before Meeting?
-        <InputCheckbox @bind-Value="policy.CleanBefore" />
+        <InputCheckbox @bind-Value="policy.CleanAfter" />
         <i>(Default is Clean After Meeting)</i>
     </label>
     <p />
@@ -108,7 +108,7 @@ else
         if (args.Value.ToString() == string.Empty)
             filteredRooms = allRooms;
 
-        var filteredList = from r in allRooms where r.DisplayName.StartsWith(args.Value.ToString()) select r;
+        var filteredList = from r in allRooms where r.DisplayName.Contains(args.Value.ToString()) select r;
         filteredRooms = filteredList.ToArray();
         StateHasChanged();
     }
