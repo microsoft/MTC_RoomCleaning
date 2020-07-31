@@ -29,7 +29,7 @@ namespace RoomCleaning.AdminUI.Services
 
         public async Task<RoomDetail[]> GetRoomsAsync()
         {
-                    
+            RoomDetail[] rooms = new RoomDetail[0];
             try
             {
                 var code = _config["authKey"];
@@ -39,14 +39,14 @@ namespace RoomCleaning.AdminUI.Services
                 var result = await _client.SendAsync(request);
                 var status = result.StatusCode;
                 var json = await result.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<RoomDetail[]>(json);
+                rooms = JsonConvert.DeserializeObject<RoomDetail[]>(json);
             }
             catch (Exception ex)
             {
 
             }
 
-            return new RoomDetail[0];
+            return rooms;
         }
 
         public async Task<bool> SendPolicyRequest(RoomPolicyRequest request)
