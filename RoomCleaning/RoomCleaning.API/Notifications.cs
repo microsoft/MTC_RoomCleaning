@@ -108,7 +108,9 @@ namespace RoomCleaning.API
 
                             //TODO: check newEvent
 
-                            //TODO: store meeting/cleanup for tracking
+                            //TODO: create Meeting object in addition to (or instead of) Notification object?
+
+                            // store meeting/cleanup for tracking
                             Shared.Models.MeetingNotification meetingNotification = new Shared.Models.MeetingNotification
                             {
                                 Room = new Shared.Models.RoomDetail
@@ -121,13 +123,15 @@ namespace RoomCleaning.API
                                 {
                                     Id = calendarEvent.Id,
                                     Start = calendarEvent.Start.ToDateTimeOffset(),
-                                    End = calendarEvent.End.ToDateTimeOffset()
+                                    End = calendarEvent.End.ToDateTimeOffset(),
+                                    Subject = calendarEvent.Subject
                                 },
                                 Cleaning = new Shared.Models.Meeting
                                 {
                                     Id = newEvent.Id,
                                     Start = newEvent.Start.ToDateTimeOffset(),
-                                    End = newEvent.End.ToDateTimeOffset()
+                                    End = newEvent.End.ToDateTimeOffset(),
+                                    Subject = newEvent.Subject
                                 },
                                 Created = DateTime.UtcNow,
                                 Modified = DateTime.UtcNow

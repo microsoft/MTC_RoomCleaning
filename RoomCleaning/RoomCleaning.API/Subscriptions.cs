@@ -73,7 +73,7 @@ namespace RoomCleaning.API
                                 {
                                     //Id = room.Id, //TODO: add it back when we have the user.Id, not the places/room.Id
                                     EmailAddress = room.Email,
-                                    DisplayName = room.DisplayName
+                                    DisplayName = room.DisplayName  //TODO: look up from graph instead of getting from request
                                 },
                                 CleaningPolicy = roomPolicyRequest.Policy
                             }
