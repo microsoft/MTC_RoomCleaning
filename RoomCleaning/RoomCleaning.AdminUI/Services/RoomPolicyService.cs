@@ -15,14 +15,14 @@ namespace RoomCleaning.AdminUI.Services
     public class RoomPolicyService
     {
         private readonly HttpClient _client;
-        private readonly IConfiguration _config;
+        private readonly string _authKey;
 
-        public string BaseUri => _config["authKey"];
+        public string BaseUri => _authKey;
 
         public RoomPolicyService(HttpClient client, IConfiguration config)
         {
             _client = client;
-            _config = config;
+            _authKey = config["authKey"];
             //_client.DefaultRequestHeaders.Add("x-functions-key", _config["authKey"]);
            
         }
@@ -32,10 +32,8 @@ namespace RoomCleaning.AdminUI.Services
             RoomDetail[] rooms = new RoomDetail[0];
             try
             {
-                var code = _config["authKey"];
-                var request = new HttpRequestMessage() { Method = HttpMethod.Get, RequestUri = new Uri($"{_client.BaseAddress}api/rooms") };
-                request.Headers.Add("x-functions-key", code);
-           
+                var request = CreateRequest("api/rooms");
+
                 var result = await _client.SendAsync(request);
                 var status = result.StatusCode;
                 var json = await result.Content.ReadAsStringAsync();
@@ -47,6 +45,13 @@ namespace RoomCleaning.AdminUI.Services
             }
 
             return rooms;
+        }
+
+        private HttpRequestMessage CreateRequest(string endpoint)
+        {
+            var request = new HttpRequestMessage() { Method = HttpMethod.Get, RequestUri = new Uri($"{_client.BaseAddress}{endpoint}") };
+            request.Headers.Add("x-functions-key", _authKey);
+            return request;
         }
 
         public async Task<bool> SendPolicyRequest(RoomPolicyRequest request)
