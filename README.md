@@ -1,4 +1,6 @@
-# Room Cleaning (Back to Work)
+# Room Cleaning (Return to Work)
+Automation that makes sure that a 30-minute meeting is scheduled adjacent to every meeting in meeting rooms across an enterprise to ensure they are properly cleaned as part of a return-to-work initiative.
+
 ![High Level Architecture](HighLevelArchitecture.jpg)
 
 # Contributing
