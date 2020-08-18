@@ -1,3 +1,5 @@
+# Room Cleaning (Back to Work)
+![High Level Architecture](HighLevelArchitecture.jpg)
 
 # Contributing
 
